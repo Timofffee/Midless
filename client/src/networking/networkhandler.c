@@ -45,7 +45,7 @@ void Network_Connect(void) {
 }
 
 void Network_Disconnect(void) {
-    Screen_Switch(SCREEN_LOGIN);
+    Screen_Switch(SCREEN_TITLE);
     Network_connectedToServer = false;
     Network_threadState = -1; //End network thread
     Screen_cursorEnabled = false;

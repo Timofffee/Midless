@@ -56,7 +56,7 @@ int main(void) {
     Texture2D titleBackground = LoadTextureFromImage(titleTex);
     UnloadImage(terrainTex);
     UnloadImage(titleTex);
-    
+
     World_ApplyTexture(texture);
     World_ApplyShader(shader);
 

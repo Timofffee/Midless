@@ -29,9 +29,11 @@ bool *exitGame;
 Color uiColBg;
 
 Texture2D mapTerrain;
+Texture2D titleBackground;
 
-void Screens_init(Texture2D terrain, bool *exit) {
+void Screens_init(Texture2D terrain, Texture2D titleImage, bool *exit) {
     mapTerrain = terrain;
+    titleBackground = titleImage;
     exitGame = exit;
 
     //Set UI colors
@@ -206,12 +208,24 @@ bool port_editMode = false;
 
 void Screen_MakeLogin(void) {
     EnableCursor();
-    DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+    // DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+    float ratio = screenWidth / (float)screenHeight;
+    float defaultRatio = 16.0f / 9;
+    Rectangle titleBackgroundRect = (Rectangle){0, 0, titleBackground.width, titleBackground.height};
+    if (ratio > defaultRatio) {
+        titleBackgroundRect.height *= defaultRatio / ratio;
+        titleBackgroundRect.y += (titleBackground.height - titleBackgroundRect.height) / 2;
+    } else {
+        titleBackgroundRect.width *= ratio / defaultRatio;
+        titleBackgroundRect.x += (titleBackground.width - titleBackgroundRect.width) / 2;
+    }
+    DrawTexturePro(titleBackground, titleBackgroundRect, (Rectangle){0, 0, screenWidth, screenHeight}, (Vector2){ 0 }, 0, WHITE);
 
     const char *title = "MIDLESS";
     int offsetY = screenHeight / 2;
     int offsetX = screenWidth / 2;
 
+    DrawText(title, offsetX - (MeasureText(title, 80) / 2) + 4, offsetY - 100 + 4, 80, BLACK);
     DrawText(title, offsetX - (MeasureText(title, 80) / 2), offsetY - 100, 80, WHITE);
 
     //Name Input

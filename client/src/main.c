@@ -51,8 +51,11 @@ int main(void) {
     Shader shader = LoadShaderFromMemory(chunkShaderVs, chunkShaderFs);
     
     Image terrainTex = LoadImage("textures/terrain.png"); 
+    Image titleTex = LoadImage("textures/TitleBackground.png"); 
     Texture2D texture = LoadTextureFromImage(terrainTex);
+    Texture2D titleBackground = LoadTextureFromImage(titleTex);
     UnloadImage(terrainTex);
+    UnloadImage(titleTex);
     
     World_ApplyTexture(texture);
     World_ApplyShader(shader);
@@ -61,7 +64,7 @@ int main(void) {
     Player_Init();
     
     bool exitProgram = false;
-    Screens_init(texture, &exitProgram);
+    Screens_init(texture, titleBackground, &exitProgram);
 
     // Game loop
     while (!WindowShouldClose() && !exitProgram) {
@@ -97,6 +100,7 @@ int main(void) {
 
     UnloadShader(shader);
     UnloadTexture(texture);
+    UnloadTexture(titleBackground);
     World_Unload();
 
     CloseWindow();

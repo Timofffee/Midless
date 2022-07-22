@@ -19,6 +19,7 @@
 #include "../networking/networkhandler.h"
 #include "../networking/client.h"
 #include "../worldgenerator.h"
+#include "../game.h"
 
 Screen Screen_Current = SCREEN_TITLE;
 bool Screen_cursorEnabled = false;
@@ -147,9 +148,7 @@ void Screen_MakePause(void) {
     //Main Menu Button
     if(GuiButton((Rectangle) {offsetX, offsetY + (index++ * 35), 200, 30 }, "Main Menu")) {
         Screen_Switch(SCREEN_TITLE);
-        Network_threadState = -1; //End network thread
         Screen_cursorEnabled = false;
-        World_Unload();
     }
 
     index++; // Separator
@@ -329,4 +328,16 @@ void Screen_Make(void) {
 
 void Screen_Switch(Screen screen) {
     Screen_Current = screen;
+
+    switch (Screen_Current)
+    {
+        case SCREEN_GAME:
+            Game_ChangeState(GAME_STATE_GAME);
+            break;
+        case SCREEN_TITLE:
+            Game_ChangeState(GAME_STATE_TITLE);
+            break;
+        default:
+            break;
+    }
 }

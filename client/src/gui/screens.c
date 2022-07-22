@@ -19,8 +19,9 @@
 #include "../networking/networkhandler.h"
 #include "../networking/client.h"
 #include "../worldgenerator.h"
+#include "../game.h"
 
-Screen Screen_Current = SCREEN_LOGIN;
+Screen Screen_Current = SCREEN_TITLE;
 bool Screen_cursorEnabled = false;
 bool Screen_showDebug = false;
 int screenHeight;
@@ -29,9 +30,11 @@ bool *exitGame;
 Color uiColBg;
 
 Texture2D mapTerrain;
+Texture2D titleBackground;
 
-void Screens_init(Texture2D terrain, bool *exit) {
+void Screens_init(Texture2D terrain, Texture2D titleImage, bool *exit) {
     mapTerrain = terrain;
+    titleBackground = titleImage;
     exitGame = exit;
 
     //Set UI colors
@@ -63,8 +66,12 @@ void Screens_init(Texture2D terrain, bool *exit) {
     GuiSetStyle(TEXTBOX, BASE_COLOR_NORMAL,     0xfbfbfbff); 
     GuiSetStyle(TEXTBOX, TEXT_COLOR_NORMAL,     0xfdf9f9ff); 
     GuiSetStyle(TEXTBOX, BASE_COLOR_FOCUSED,    0xc7effeff); 
-    GuiSetStyle(TEXTBOX, BORDER_COLOR_PRESSED,  0x0392c7ff); 
-    GuiSetStyle(TEXTBOX, TEXT_COLOR_PRESSED,    0x338bafff); 
+    GuiSetStyle(TEXTBOX, BORDER_COLOR_FOCUSED,  0x0392c7ff); 
+    GuiSetStyle(TEXTBOX, TEXT_COLOR_FOCUSED,    0xf9f9f9ff); 
+    GuiSetStyle(TEXTBOX, BORDER_COLOR_PRESSED,  0xf9f9f9ff); 
+    GuiSetStyle(TEXTBOX, BASE_COLOR_PRESSED,    0x00000011); 
+    GuiSetStyle(TEXTBOX, TEXT_COLOR_PRESSED,    0xf9f9f9ff); 
+    Screen_Switch(SCREEN_TITLE);
 }
 
 void Screen_MakeGame(void) {
@@ -134,17 +141,17 @@ void Screen_MakePause(void) {
     }
 
     //Options Button
-    if(GuiButton((Rectangle) {offsetX, offsetY + (index++ * 35), 200, 30 }, "Options")) {
-        Screen_Switch(SCREEN_OPTIONS);
+    if(GuiButton((Rectangle) {offsetX, offsetY + (index++ * 35), 200, 30 }, "Settings")) {
+        Screen_Switch(SCREEN_SETTINGS);
     }
 
     //Main Menu Button
     if(GuiButton((Rectangle) {offsetX, offsetY + (index++ * 35), 200, 30 }, "Main Menu")) {
-        Screen_Switch(SCREEN_LOGIN);
-        Network_threadState = -1; //End network thread
+        Screen_Switch(SCREEN_TITLE);
         Screen_cursorEnabled = false;
-        World_Unload();
     }
+
+    index++; // Separator
 
     //Quit Button
     if(GuiButton((Rectangle) {offsetX, offsetY + (index++ * 35), 200, 30 }, "Quit")) {
@@ -152,7 +159,7 @@ void Screen_MakePause(void) {
     }
 }
 
-void Screen_MakeOptions(void) {
+void Screen_MakeSettings(void) {
     DrawRectangle(0, 0, screenWidth, screenHeight, uiColBg);
 
     int offsetY = screenHeight / 2 - 30;
@@ -204,33 +211,72 @@ bool login_editMode = false;
 bool ip_editMode = false;
 bool port_editMode = false;
 
-void Screen_MakeLogin(void) {
+void Screen_MakeTitle(void) {
     EnableCursor();
-    DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+    // DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+    float ratio = screenWidth / (float)screenHeight;
+    float defaultRatio = 16.0f / 9;
+    Rectangle titleBackgroundRect = (Rectangle){0, 0, titleBackground.width, titleBackground.height};
+    if (ratio > defaultRatio) {
+        titleBackgroundRect.height *= defaultRatio / ratio;
+        titleBackgroundRect.y += (titleBackground.height - titleBackgroundRect.height) / 2;
+    } else {
+        titleBackgroundRect.width *= ratio / defaultRatio;
+        titleBackgroundRect.x += (titleBackground.width - titleBackgroundRect.width) / 2;
+    }
+    DrawTexturePro(titleBackground, titleBackgroundRect, (Rectangle){0, 0, screenWidth, screenHeight}, (Vector2){ 0 }, 0, WHITE);
 
     const char *title = "MIDLESS";
     int offsetY = screenHeight / 2;
     int offsetX = screenWidth / 2;
 
-    DrawText(title, offsetX - (MeasureText(title, 80) / 2), offsetY - 100, 80, WHITE);
+    DrawText(title, offsetX - (MeasureText(title, 80) / 2) + 4, offsetY - 150 + 4, 80, BLACK);
+    DrawText(title, offsetX - (MeasureText(title, 80) / 2), offsetY - 150, 80, WHITE);
+
+    //Singleplayer Button
+    if(GuiButton((Rectangle) { offsetX - 100, offsetY - 10, 200, 30 }, "Singleplayer")) {
+        DisableCursor();
+        World_LoadSingleplayer();
+    }
+
+    //Login button
+    if(GuiButton((Rectangle) { offsetX - 100, offsetY + 25, 200, 30 }, "Multiplayer")) {
+        Screen_Switch(SCREEN_LOGIN);
+    }
+
+    GuiDisable();
+    if(GuiButton((Rectangle) { offsetX - 100, offsetY + 60, 200, 30 }, "Settings")) {
+        // Screen_Switch(SCREEN_SETTINGS);
+    }
+    GuiEnable();
+}
+
+void Screen_MakeLogin(void) {
+    int offsetY = screenHeight / 2;
+    int offsetX = screenWidth / 2;
+
+    DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
 
     //Name Input
-    if(GuiTextBox((Rectangle) { offsetX - 80, offsetY - 15, 160, 30 }, name_input, 16, login_editMode)) {
+    DrawRectangleRec((Rectangle) { offsetX - 100, offsetY - 65, 200, 30 }, (Color){0, 0, 0, 80});
+    if(GuiTextBox((Rectangle) { offsetX - 100, offsetY - 65, 200, 30 }, name_input, 16, login_editMode)) {
         login_editMode = !login_editMode;
     }
 
     //IP Input
-    if(GuiTextBox((Rectangle) { offsetX - 80, offsetY + 20, 116, 30 }, ip_input, 16, ip_editMode)) {
+    DrawRectangleRec((Rectangle) { offsetX - 100, offsetY - 30, 136, 30 }, (Color){0, 0, 0, 80});
+    if(GuiTextBox((Rectangle) { offsetX - 100, offsetY - 30, 136, 30 }, ip_input, 16, ip_editMode)) {
         ip_editMode = !ip_editMode;
     }
 
     //Port Input
-    if(GuiTextBox((Rectangle) { offsetX + 40, offsetY + 20, 40, 30 }, port_input, 5, port_editMode)) {
+    DrawRectangleRec((Rectangle) { offsetX + 40, offsetY - 30, 60, 30 }, (Color){0, 0, 0, 80});
+    if(GuiTextBox((Rectangle) { offsetX + 40, offsetY - 30, 60, 30 }, port_input, 5, port_editMode)) {
         port_editMode = !port_editMode;
     }
 
     //Login button
-    if(GuiButton((Rectangle) { offsetX - 80, offsetY + 55, 160, 30 }, "Login")) {
+    if(GuiButton((Rectangle) { offsetX - 100, offsetY + 5, 200, 30 }, "Login")) {
         DisableCursor();
         Screen_Switch(SCREEN_JOINING);
         Network_threadState = 0;
@@ -243,12 +289,10 @@ void Screen_MakeLogin(void) {
         pthread_create(&clientThread_id, NULL, Client_Init, (void*)&Network_threadState);
     }
     
-    //Singleplayer Button
-    if(GuiButton((Rectangle) { offsetX - 80, offsetY + 90, 160, 30 }, "Singleplayer")) {
-        DisableCursor();
-        World_LoadSingleplayer();
+    //Back Button
+    if(GuiButton((Rectangle) { offsetX - 100, offsetY + 50, 200, 30 }, "Back")) {
+        Screen_Switch(SCREEN_TITLE);
     }
-
 }
 
 void Screen_Make(void) {
@@ -257,18 +301,43 @@ void Screen_Make(void) {
     
     uiColBg = (Color){ 0, 0, 0, 80 };
     
-    if(Screen_Current == SCREEN_GAME)
-        Screen_MakeGame();
-    else if(Screen_Current == SCREEN_PAUSE)
-        Screen_MakePause();
-    else if(Screen_Current == SCREEN_JOINING)
-        Screen_MakeJoining();
-    else if(Screen_Current == SCREEN_LOGIN)
-        Screen_MakeLogin();
-    else if(Screen_Current == SCREEN_OPTIONS)
-        Screen_MakeOptions();
+    switch (Screen_Current)
+    {
+        case SCREEN_GAME:
+            Screen_MakeGame();
+            break;
+        case SCREEN_PAUSE:
+            Screen_MakePause();
+            break;
+        case SCREEN_JOINING:
+            Screen_MakeJoining();
+            break;
+        case SCREEN_TITLE:
+            Screen_MakeTitle();
+            break;
+        case SCREEN_LOGIN:
+            Screen_MakeLogin();
+            break;
+        case SCREEN_SETTINGS:
+            Screen_MakeSettings();
+            break;
+        default:
+            break;
+    }
 }
 
 void Screen_Switch(Screen screen) {
     Screen_Current = screen;
+
+    switch (Screen_Current)
+    {
+        case SCREEN_GAME:
+            Game_ChangeState(GAME_STATE_GAME);
+            break;
+        case SCREEN_TITLE:
+            Game_ChangeState(GAME_STATE_TITLE);
+            break;
+        default:
+            break;
+    }
 }

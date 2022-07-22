@@ -24,7 +24,6 @@ int main(void) {
     Image midlessLogo = LoadImage("textures/midless.png"); 
     SetWindowIcon(midlessLogo);
 
-
     Game_Init();
 
     CloseWindow();

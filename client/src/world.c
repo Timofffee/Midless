@@ -59,10 +59,7 @@ void World_Init(void) {
     pthread_create(&chunkThread_id, NULL, World_ReadChunksQueues, NULL);
 }
 
-void World_LoadSingleplayer(void) {
-
-    Screen_Switch(SCREEN_GAME);
-
+void World_LoadMap(void) {
     world.loadChunks = true;
     World_LoadChunks(false);
 }
@@ -73,7 +70,6 @@ pthread_mutex_t generateChunk_mutex;
 pthread_mutex_t chunk_mutex;
 void *World_ReadChunksQueues(void *state) {
     while(true) {
-
         pthread_mutex_lock(&chunk_mutex);
         
         QueuedChunk *queuedChunk = world.generateChunksQueue;

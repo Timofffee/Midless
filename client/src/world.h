@@ -29,7 +29,7 @@ extern World world;
 //Initialize the world.
 void World_Init(void);
 //Load singleplayer world.
-void World_LoadSingleplayer(void);
+void World_LoadMap(void);
 //Build Chunks mesh in queue
 void World_UpdateChunks(void);
 //Load & Unload Chunks around players.

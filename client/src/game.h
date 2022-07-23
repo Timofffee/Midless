@@ -15,8 +15,14 @@ typedef enum GameState {
 
 extern GameState Game_State;
 
-void Game_Init(void);
+typedef struct GameLoop {
+    void (*init) (void);
+    void (*deinit) (void);
+    bool (*update) (void);
+} GameLoop;
 
+void Game_Init(void);
 void Game_ChangeState(GameState newState);
+void Game_Quit(void);
 
 #endif

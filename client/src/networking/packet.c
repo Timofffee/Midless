@@ -131,7 +131,7 @@ int compressedLength = 0;
 unsigned char *compressedMap;
 void Packet_H_MapInit(void) {
 
-    World_LoadSingleplayer();
+    World_LoadMap();
     
 }
 

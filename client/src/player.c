@@ -50,27 +50,27 @@ void Player_Init() {
 
 void Player_CheckInputs() {
     
-    if (IsKeyPressed(KEY_ESCAPE)) {
-        if (Screen_cursorEnabled) {
-            DisableCursor();
-            Chat_open = false;
-            Screen_Switch(SCREEN_GAME);
-        } else {
-            EnableCursor();
-            Screen_Switch(SCREEN_PAUSE);
-        }
-        Screen_cursorEnabled = !Screen_cursorEnabled;
-    } else if (IsKeyPressed(KEY_T)) {
-        if (Screen_cursorEnabled && !Chat_open) {
-            DisableCursor();
-            Screen_cursorEnabled = false;
-            Screen_Switch(SCREEN_GAME);
-        } else {
-            Chat_open = true;
-            EnableCursor();
-            Screen_cursorEnabled = true;
-        }
-    }
+    // if (IsKeyPressed(KEY_ESCAPE)) {
+    //     if (Screen_cursorEnabled) {
+    //         DisableCursor();
+    //         Chat_open = false;
+    //         Screen_Switch(SCREEN_GAME);
+    //     } else {
+    //         EnableCursor();
+    //         Screen_Switch(SCREEN_PAUSE);
+    //     }
+    //     Screen_cursorEnabled = !Screen_cursorEnabled;
+    // } else if (IsKeyPressed(KEY_T)) {
+    //     if (Screen_cursorEnabled && !Chat_open) {
+    //         DisableCursor();
+    //         Screen_cursorEnabled = false;
+    //         Screen_Switch(SCREEN_GAME);
+    //     } else {
+    //         Chat_open = true;
+    //         EnableCursor();
+    //         Screen_cursorEnabled = true;
+    //     }
+    // }
     
     
     Vector2 mousePositionDelta = { 0.0f, 0.0f };

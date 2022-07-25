@@ -174,13 +174,7 @@ void TitleUi_DrawSettings(void) {
     DrawTextEx(GetFontDefault(), drawDistanceTxt, (Vector2){offsetX + 100 - sizeText.x / 2, offsetY - sizeText.y / 2}, 10.0f, 1, WHITE);
 
     if (newDrawDistance != world.drawDistance) {
-        if(newDrawDistance > world.drawDistance) {
-            world.drawDistance = newDrawDistance;
-            World_LoadChunks(false);
-        } else {
-            world.drawDistance = newDrawDistance;
-            World_Reload();
-        }
+        world.drawDistance = newDrawDistance;
     }
 
     //Draw Debug Button

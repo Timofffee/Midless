@@ -34,6 +34,8 @@ void Game_Init(void) {
     Block_BuildDefinition();
     Screens_init();
 
+    InitAudioDevice();
+
     Game_Loops[Game_State].init();
 
     // Game loop
@@ -42,6 +44,8 @@ void Game_Init(void) {
     }
     
     Game_Loops[Game_State].deinit();
+
+    CloseAudioDevice();
 }
 
 void Game_ChangeState(GameState newState) {

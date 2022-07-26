@@ -37,7 +37,7 @@ void Player_Init() {
     
     player.velocity = (Vector3) {0, 0, 0};
     player.position = (Vector3) { 0, 80, 0 };
-    player.speed = 0.125f / 6;
+    player.speed = 1.0f / 60.0f;
     
     player.collisionBox.min = (Vector3) { 0.2f, 0, 0.2f };
     player.collisionBox.max = (Vector3) { 0.8f, 1.5f, 0.8f };
@@ -49,29 +49,6 @@ void Player_Init() {
 }
 
 void Player_CheckInputs() {
-    
-    // if (IsKeyPressed(KEY_ESCAPE)) {
-    //     if (Screen_cursorEnabled) {
-    //         DisableCursor();
-    //         Chat_open = false;
-    //         Screen_Switch(SCREEN_GAME);
-    //     } else {
-    //         EnableCursor();
-    //         Screen_Switch(SCREEN_PAUSE);
-    //     }
-    //     Screen_cursorEnabled = !Screen_cursorEnabled;
-    // } else if (IsKeyPressed(KEY_T)) {
-    //     if (Screen_cursorEnabled && !Chat_open) {
-    //         DisableCursor();
-    //         Screen_cursorEnabled = false;
-    //         Screen_Switch(SCREEN_GAME);
-    //     } else {
-    //         Chat_open = true;
-    //         EnableCursor();
-    //         Screen_cursorEnabled = true;
-    //     }
-    // }
-    
     
     Vector2 mousePositionDelta = { 0.0f, 0.0f };
     Vector2 mousePos = GetMousePosition();
@@ -113,7 +90,7 @@ void Player_CheckInputs() {
     if (!Screen_cursorEnabled) {
         //Handle keys & mouse
         if (IsKeyDown(KEY_SPACE) && player.canJump) {
-            player.velocity.y += 0.2f;
+            player.velocity.y += 0.165;
             player.canJump = false;
         }
         Vector3 moveDir = { 0 };

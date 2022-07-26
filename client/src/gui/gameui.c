@@ -52,6 +52,28 @@ void GameUi_Draw(void) {
     screenWidth = GetScreenWidth();
     
     uiColBg = (Color){ 0, 0, 0, 80 };
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        if (Screen_cursorEnabled) {
+            DisableCursor();
+            Chat_open = false;
+            GameUi_Switch(GAME_SCREEN_HUD);
+        } else {
+            EnableCursor();
+            GameUi_Switch(GAME_SCREEN_PAUSE);
+        }
+        Screen_cursorEnabled = !Screen_cursorEnabled;
+    } else if (IsKeyPressed(KEY_T)) {
+        if (Screen_cursorEnabled && !Chat_open) {
+            DisableCursor();
+            Screen_cursorEnabled = false;
+            GameUi_Switch(GAME_SCREEN_HUD);
+        } else {
+            Chat_open = true;
+            EnableCursor();
+            Screen_cursorEnabled = true;
+        }
+    }
     
     switch (GameScreen_Current)
     {
@@ -73,7 +95,6 @@ void GameUi_DrawHUD(void) {
 
     //Draw debug infos
     const char* coordText = TextFormat("X: %i Y: %i Z: %i", (int)player.position.x, (int)player.position.y, (int)player.position.z);
-    const char* camUp = TextFormat("X: %f Y: %f Z: %f", player.camera.target.x, player.camera.target.y, player.camera.target.z);
     const char* debugText;
 
     if(Screen_showDebug) {
@@ -88,7 +109,6 @@ void GameUi_DrawHUD(void) {
         DrawRectangle(13, 15, backgroundWidth + 6, 39, uiColBg);
         DrawText(debugText, 16, 16, 20, WHITE);
         DrawText(coordText, 16, 36, 20, WHITE);
-        DrawText(camUp, 16, 56, 20, WHITE);
     }
 
     //Draw crosshair

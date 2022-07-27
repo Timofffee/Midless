@@ -5,22 +5,14 @@
  * https://opensource.org/licenses/MIT
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include <pthread.h>
 #include <raylib.h>
 #include <raymath.h>
-#include "rlgl.h"
 #include "player.h"
 #include "world.h"
-#include "screens.h"
 #include "block/block.h"
 #include "networking/networkhandler.h"
-#include "chat.h"
 #include "game.h"
 #include "gui/gameui.h"
-#include <stdio.h>
 
 Texture2D texture;
 Shader shader;

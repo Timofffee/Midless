@@ -5,15 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <raylib.h>
 #include <raygui.h>
 
 #include "chat.h"
 #include "screens.h"
-#include "../player.h"
 #include "../networking/networkhandler.h"
 #include "../networking/packet.h"
 

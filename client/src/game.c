@@ -14,13 +14,14 @@
 #include "rlgl.h"
 #include "player.h"
 #include "world.h"
-#include "screens.h"
+#include "gui/screens.h"
 #include "block/block.h"
 #include "networking/networkhandler.h"
-#include "chat.h"
+#include "gui/chat.h"
 #include "game.h"
 #include "gameloop.h"
 #include "titleloop.h"
+#include "input.h"
 
 GameState Game_State = GAME_STATE_TITLE;
 GameLoop Game_Loops[] = {
@@ -30,6 +31,7 @@ GameLoop Game_Loops[] = {
 bool exitProgram = false;
 
 void Game_Init(void) {
+    Input_Init();
     EntityModel_DefineAll();
     Block_BuildDefinition();
     Screens_init();

@@ -13,12 +13,13 @@
 #include "math.h"
 #include "world.h"
 #include "raycast.h"
-#include "screens.h"
-#include "chat.h"
+#include "gui/screens.h"
+#include "gui/chat.h"
 #include "block/block.h"
 #include "networking/networkhandler.h"
 #include "networking/packet.h"
 #include "vectormath.h"
+#include "input.h"
 
 #define MOUSE_SENSITIVITY 0.003f
 
@@ -89,28 +90,28 @@ void Player_CheckInputs() {
     
     if (!Screen_cursorEnabled) {
         //Handle keys & mouse
-        if (IsKeyDown(KEY_SPACE) && player.canJump) {
+        if (Input_IsActionDown(ACTION_JUMP) && player.canJump) {
             player.velocity.y += 0.165;
             player.canJump = false;
         }
         Vector3 moveDir = { 0 };
         
-        if (IsKeyDown(KEY_W)) {
+        if (Input_IsActionDown(ACTION_MOVE_FORWARD)) {
             moveDir.z += sx;
             moveDir.x += cx;
         }
         
-        if (IsKeyDown(KEY_S)) {
+        if (Input_IsActionDown(ACTION_MOVE_BACKWARD)) {
             moveDir.z -= sx;
             moveDir.x -= cx;
         }
         
-        if (IsKeyDown(KEY_A)) {
+        if (Input_IsActionDown(ACTION_MOVE_LEFT)) {
             moveDir.z -= sx90;
             moveDir.x -= cx90;
         }
         
-        if (IsKeyDown(KEY_D)) {
+        if (Input_IsActionDown(ACTION_MOVE_RIGHT)) {
             moveDir.z += sx90;
             moveDir.x += cx90;
         }

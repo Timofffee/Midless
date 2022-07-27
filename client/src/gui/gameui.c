@@ -5,14 +5,9 @@
  * https://opensource.org/licenses/MIT
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include <pthread.h>
 #include <raylib.h>
 #include <raygui.h>
 #include <raymath.h>
-#include "rlgl.h"
 #include "player.h"
 #include "world.h"
 #include "screens.h"

@@ -10,13 +10,11 @@
 #include <raylib.h>
 #include <raygui.h>
 #include "screens.h"
-#include "chat.h"
 #include "../player.h"
 #include "../world.h"
 #include "../block/block.h"
 #include "../networking/networkhandler.h"
 #include "../networking/client.h"
-#include "../worldgenerator.h"
 #include "../game.h"
 #include "titleui.h"
 
